@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABER咨询 - 管理后台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #2a5298;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .nav-tab.active {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            min-height: 400px;
+        }
+
+        .article-form {
+            max-width: 800px;
+        }
+
+        .article-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+        }
+
+        .article-list {
+            margin-top: 20px;
+        }
+
+        .article-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #1e3c72;
+        }
+
+        .article-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SABER咨询管理后台</h1>
+            <p>文章管理与系统配置</p>
+        </div>
+
+        <!-- 登录表单 -->
+        <div id="loginForm" class="login-form">
+            <h2>管理员登录</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">登录</button>
+            </form>
+        </div>
+
+        <!-- 管理后台 -->
+        <div id="dashboard" class="dashboard">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('articles')">文章管理</button>
+                <button class="nav-tab" onclick="showTab('create')">创建文章</button>
+                <button class="nav-tab" onclick="showTab('settings')">系统设置</button>
+            </div>
+
+            <!-- 文章管理 -->
+            <div id="articles" class="tab-content">
+                <h2>文章管理</h2>
+                <input type="text" class="search-box" placeholder="搜索文章..." onkeyup="searchArticles(this.value)">
+                <div id="articleList" class="article-list">
+                    <!-- 文章列表将在这里动态加载 -->
+                </div>
+            </div>
+
+            <!-- 创建文章 -->
+            <div id="create" class="tab-content" style="display: none;">
+                <h2>创建新文章</h2>
+                <form id="createArticleForm" class="article-form">
+                    <div class="form-group">
+                        <label for="title">文章标题 (中文)</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="titleEn">文章标题 (英文)</label>
+                        <input type="text" id="titleEn" name="titleEn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">分类</label>
+                        <select id="category" name="category" required>
+                            <option value="certification">认证流程</option>
+                            <option value="pcoc">PCOC认证</option>
+                            <option value="scoc">SCOC认证</option>
+                            <option value="gcc">GCC认证</option>
+                            <option value="news">新闻资讯</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">文章内容 (中文)</label>
+                        <textarea id="content" name="content" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="contentEn">文章内容 (英文)</label>
+                        <textarea id="contentEn" name="contentEn" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">创建文章</button>
+                </form>
+            </div>
+
+            <!-- 系统设置 -->
+            <div id="settings" class="tab-content" style="display: none;">
+                <h2>系统设置</h2>
+                <p>系统配置功能开发中...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'articles';
+        let articles = [];
+
+        // 登录处理
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadArticles();
+                } else {
+                    alert('登录失败：' + result.message);
+                }
+            })
+            .catch(error => {
+                alert('登录失败：' + error.message);
+            });
+        });
+
+        // 标签页切换
+        function showTab(tabName) {
+            // 隐藏所有标签页内容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // 移除所有标签页的active类
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的标签页
+            document.getElementById(tabName).style.display = 'block';
+            
+            // 添加active类到选中的标签
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+        }
+
+        // 加载文章列表
+        function loadArticles() {
+            fetch('/api/articles')
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    articles = result.data;
+                    displayArticles(articles);
+                }
+            })
+            .catch(error => {
+                console.error('加载文章失败:', error);
+            });
+        }
+
+        // 显示文章列表
+        function displayArticles(articleList) {
+            const container = document.getElementById('articleList');
+            container.innerHTML = '';
+            
+            articleList.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article-item';
+                articleDiv.innerHTML = `
+                    <div class="article-title">${article.title}</div>
+                    <div class="article-meta">
+                        分类: ${article.category} | 
+                        创建时间: ${new Date(article.createdAt).toLocaleString()}
+                    </div>
+                    <div class="article-actions">
+                        <button class="btn-small btn-edit" onclick="editArticle(${article.id})">编辑</button>
+                        <button class="btn-small btn-delete" onclick="deleteArticle(${article.id})">删除</button>
+                    </div>
+                `;
+                container.appendChild(articleDiv);
+            });
+        }
+
+        // 搜索文章
+        function searchArticles(keyword) {
+            if (keyword.trim() === '') {
+                displayArticles(articles);
+                return;
+            }
+            
+            fetch(`/api/articles?search=${encodeURIComponent(keyword)}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    displayArticles(result.data);
+                }
+            })
+            .catch(error => {
+                console.error('搜索文章失败:', error);
+            });
+        }
+
+        // 创建文章
+        document.getElementById('createArticleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            fetch('/api/admin/articles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('文章创建成功！');
+                    this.reset();
+                    loadArticles();
+                    showTab('articles');
+                } else {
+                    alert('创建失败：' + result.message);
+                }
+            })
+            .catch(error => {
+                alert('创建失败：' + error.message);
+            });
+        });
+
+        // 删除文章
+        function deleteArticle(id) {
+            if (confirm('确定要删除这篇文章吗？')) {
+                fetch(`/api/admin/articles/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('删除成功！');
+                        loadArticles();
+                    } else {
+                        alert('删除失败：' + result.message);
+                    }
+                })
+                .catch(error => {
+                    alert('删除失败：' + error.message);
+                });
+            }
+        }
+
+        // 编辑文章（简化版）
+        function editArticle(id) {
+            alert('编辑功能开发中...');
+        }
+    </script>
+</body>
+</html>

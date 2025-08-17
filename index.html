@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SABER专业咨询 - 沙特市场准入专家</title>
+    <title>SABER Professional Consulting - Saudi Market Access Expert</title>
     <style>
         * {
             margin: 0;
@@ -23,21 +23,29 @@
             top: 20px;
             right: 20px;
             z-index: 1001;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
             padding: 5px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+            text-align: center;
         }
 
         .language-switcher button {
             background: none;
             border: none;
-            padding: 8px 15px;
+            padding: 8px 12px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s;
+            min-width: 50px;
+            margin: 0 2px;
         }
+
+
 
         .language-switcher button.active {
             background: #1e3c72;
@@ -210,6 +218,129 @@
             color: #666;
         }
 
+        /* 咨询模块 */
+        .consultation {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .search-container {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 2px rgba(30, 60, 114, 0.1);
+        }
+
+        .search-btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #2a5298;
+        }
+
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-title {
+            color: #1e3c72;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .article-title:hover {
+            color: #2a5298;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .read-more:hover {
+            color: #2a5298;
+        }
+
         /* 联系表单 */
         .contact {
             padding: 4rem 0;
@@ -274,7 +405,7 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: none;
+            display: block;
             overflow: hidden;
         }
 
@@ -356,7 +487,7 @@
             height: 60px;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             border-radius: 50%;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             color: white;
@@ -441,11 +572,11 @@
         }
     </style>
 </head>
-<body data-lang="zh">
+<body data-lang="en">
     <!-- 语言切换器 -->
     <div class="language-switcher">
-        <button class="active" onclick="switchLanguage('zh')">中文</button>
-        <button onclick="switchLanguage('en')">English</button>
+        <button onclick="switchLanguage('zh')">中文</button>
+        <button class="active" onclick="switchLanguage('en')">English</button>
     </div>
 
     <!-- 导航栏 -->
@@ -463,6 +594,10 @@
                 <li><a href="#services">
                     <span class="zh">服务</span>
                     <span class="en">Services</span>
+                </a></li>
+                <li><a href="#consultation">
+                    <span class="zh">咨询</span>
+                    <span class="en">Consultation</span>
                 </a></li>
                 <li><a href="#about">
                     <span class="zh">关于我们</span>
@@ -611,6 +746,66 @@
                         <p>🔹 <span class="zh">确保认证成功率</span><span class="en">Ensure certification success rate</span></p>
                         <p>🔹 <span class="zh">持续的技术支持服务</span><span class="en">Continuous technical support service</span></p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 咨询模块 -->
+        <section id="consultation" class="consultation">
+            <div class="container">
+                <div class="section-title">
+                    <h2>
+                        <span class="zh">专业咨询</span>
+                        <span class="en">Professional Consultation</span>
+                    </h2>
+                    <p>
+                        <span class="zh">获取最新的SABER认证资讯和专业知识</span>
+                        <span class="en">Get the latest SABER certification information and professional knowledge</span>
+                    </p>
+                </div>
+                
+                <!-- 搜索框 -->
+                <div class="search-container">
+                    <input type="text" id="articleSearch" 
+                        placeholder="搜索文章..." 
+                        class="search-input">
+                    <button onclick="searchArticles()" class="search-btn">
+                        <span class="zh">搜索</span>
+                        <span class="en">Search</span>
+                    </button>
+                </div>
+
+                <!-- 分类筛选 -->
+                <div class="category-filter">
+                    <button class="filter-btn active" onclick="filterArticles('all')">
+                        <span class="zh">全部</span>
+                        <span class="en">All</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterArticles('certification')">
+                        <span class="zh">认证流程</span>
+                        <span class="en">Certification</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterArticles('pcoc')">
+                        <span class="zh">PCOC认证</span>
+                        <span class="en">PCOC</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterArticles('scoc')">
+                        <span class="zh">SCOC认证</span>
+                        <span class="en">SCOC</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterArticles('gcc')">
+                        <span class="zh">GCC认证</span>
+                        <span class="en">GCC</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterArticles('news')">
+                        <span class="zh">新闻资讯</span>
+                        <span class="en">News</span>
+                    </button>
+                </div>
+
+                <!-- 文章列表 -->
+                <div id="articlesList" class="articles-grid">
+                    <!-- 文章将在这里动态加载 -->
                 </div>
             </div>
         </section>
@@ -933,7 +1128,197 @@
                 console.log('You have', inquiries.length, 'inquiries to review');
                 console.log('Latest inquiries:', inquiries.slice(-5));
             }
+            
+            // 加载文章列表
+            loadArticles();
         });
+
+        // 文章相关功能
+        let allArticles = [];
+        let currentCategory = 'all';
+
+        // 加载文章列表
+        function loadArticles() {
+            fetch('/api/articles')
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    allArticles = result.data;
+                    displayArticles(allArticles);
+                }
+            })
+            .catch(error => {
+                console.error('加载文章失败:', error);
+            });
+        }
+
+        // 显示文章列表
+        function displayArticles(articles) {
+            const container = document.getElementById('articlesList');
+            container.innerHTML = '';
+            
+            if (articles.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; grid-column: 1 / -1; padding: 2rem; color: #666;">
+                        <span class="zh">暂无相关文章</span>
+                        <span class="en">No articles found</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            articles.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article-card';
+                
+                const currentLang = document.body.getAttribute('data-lang');
+                const title = currentLang === 'zh' ? article.title : article.titleEn;
+                const content = currentLang === 'zh' ? article.content : article.contentEn;
+                
+                articleDiv.innerHTML = `
+                    <div class="article-content">
+                        <h3 class="article-title" onclick="showArticleDetail(${article.id})">${title}</h3>
+                        <div class="article-meta">
+                            <span class="zh">分类: ${getCategoryName(article.category)}</span>
+                            <span class="en">Category: ${getCategoryNameEn(article.category)}</span>
+                            <span> | ${new Date(article.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <p class="article-excerpt">${content.substring(0, 100)}...</p>
+                        <div class="read-more" onclick="showArticleDetail(${article.id})">
+                            <span class="zh">阅读更多</span>
+                            <span class="en">Read More</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(articleDiv);
+            });
+        }
+
+        // 搜索文章
+        function searchArticles() {
+            const keyword = document.getElementById('articleSearch').value.trim();
+            if (keyword === '') {
+                filterArticles(currentCategory);
+                return;
+            }
+            
+            fetch(`/api/articles?search=${encodeURIComponent(keyword)}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    displayArticles(result.data);
+                }
+            })
+            .catch(error => {
+                console.error('搜索文章失败:', error);
+            });
+        }
+
+        // 筛选文章
+        function filterArticles(category) {
+            currentCategory = category;
+            
+            // 更新筛选按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                displayArticles(allArticles);
+            } else {
+                const filteredArticles = allArticles.filter(article => article.category === category);
+                displayArticles(filteredArticles);
+            }
+        }
+
+        // 显示文章详情
+        function showArticleDetail(id) {
+            fetch(`/api/articles/${id}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const article = result.data;
+                    const currentLang = document.body.getAttribute('data-lang');
+                    const title = currentLang === 'zh' ? article.title : article.titleEn;
+                    const content = currentLang === 'zh' ? article.content : article.contentEn;
+                    
+                    // 创建模态框显示文章详情
+                    const modal = document.createElement('div');
+                    modal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.8);
+                        z-index: 2000;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px;
+                    `;
+                    
+                    modal.innerHTML = `
+                        <div style="
+                            background: white;
+                            max-width: 800px;
+                            max-height: 80vh;
+                            overflow-y: auto;
+                            border-radius: 10px;
+                            padding: 2rem;
+                            position: relative;
+                        ">
+                            <button onclick="this.parentElement.parentElement.remove()" style="
+                                position: absolute;
+                                top: 10px;
+                                right: 15px;
+                                background: none;
+                                border: none;
+                                font-size: 24px;
+                                cursor: pointer;
+                                color: #666;
+                            ">×</button>
+                            <h2 style="color: #1e3c72; margin-bottom: 1rem;">${title}</h2>
+                            <div style="color: #666; margin-bottom: 1rem;">
+                                <span class="zh">分类: ${getCategoryName(article.category)}</span>
+                                <span class="en">Category: ${getCategoryNameEn(article.category)}</span>
+                                <span> | ${new Date(article.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <div style="line-height: 1.8; color: #333;">${content}</div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modal);
+                }
+            })
+            .catch(error => {
+                console.error('获取文章详情失败:', error);
+            });
+        }
+
+        // 获取分类名称
+        function getCategoryName(category) {
+            const categories = {
+                'certification': '认证流程',
+                'pcoc': 'PCOC认证',
+                'scoc': 'SCOC认证',
+                'gcc': 'GCC认证',
+                'news': '新闻资讯'
+            };
+            return categories[category] || category;
+        }
+
+        function getCategoryNameEn(category) {
+            const categories = {
+                'certification': 'Certification Process',
+                'pcoc': 'PCOC Certification',
+                'scoc': 'SCOC Certification',
+                'gcc': 'GCC Certification',
+                'news': 'News'
+            };
+            return categories[category] || category;
+        }
     </script>
 </body>
 </html>

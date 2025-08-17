@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABER咨询 - 邮件测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .test-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .test-btn {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .test-btn:hover {
+            background: #e9ecef;
+        }
+
+        .status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 邮件测试工具</h1>
+            <p>SABER咨询网站邮件功能测试</p>
+        </div>
+
+        <div id="status" class="status">
+            正在检查服务器状态...
+        </div>
+
+        <div class="test-buttons">
+            <button class="test-btn" onclick="fillTestData('inquiry')">填写咨询测试</button>
+            <button class="test-btn" onclick="fillTestData('chat')">填写聊天测试</button>
+        </div>
+
+        <form id="testForm">
+            <div class="form-group">
+                <label for="testType">测试类型</label>
+                <select id="testType" required>
+                    <option value="inquiry">咨询表单测试</option>
+                    <option value="chat">聊天消息测试</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">姓名 *</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱 *</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group" id="companyGroup">
+                <label for="company">公司名称</label>
+                <input type="text" id="company">
+            </div>
+
+            <div class="form-group" id="phoneGroup">
+                <label for="phone">电话</label>
+                <input type="tel" id="phone">
+            </div>
+
+            <div class="form-group" id="serviceGroup">
+                <label for="service">服务类型</label>
+                <select id="service">
+                    <option value="">请选择服务类型</option>
+                    <option value="saber-pcoc">SABER PCOC认证</option>
+                    <option value="saber-scoc">SABER SCOC认证</option>
+                    <option value="saso-iecee">SASO IECEE认证</option>
+                    <option value="gcc">GCC认证</option>
+                    <option value="water-efficiency">水效标签认证</option>
+                    <option value="consultation">其他咨询服务</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">消息内容 *</label>
+                <textarea id="message" required placeholder="请输入测试消息内容..."></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                发送测试邮件
+            </button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // 检查服务器状态
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('status');
+                if (data.success) {
+                    statusDiv.className = 'status connected';
+                    statusDiv.innerHTML = '✅ 服务器连接正常';
+                } else {
+                    statusDiv.className = 'status disconnected';
+                    statusDiv.innerHTML = '❌ 服务器连接异常';
+                }
+            } catch (error) {
+                const statusDiv = document.getElementById('status');
+                statusDiv.className = 'status disconnected';
+                statusDiv.innerHTML = '❌ 无法连接到服务器';
+            }
+        }
+
+        // 填充测试数据
+        function fillTestData(type) {
+            const testData = {
+                inquiry: {
+                    name: '测试用户',
+                    email: 'test@example.com',
+                    company: '测试公司',
+                    phone: '138-0000-0000',
+                    service: 'saber-pcoc',
+                    message: '这是一个SABER PCOC认证的测试咨询，请检查邮件功能是否正常工作。'
+                },
+                chat: {
+                    name: '聊天测试用户',
+                    email: 'chat@example.com',
+                    company: '',
+                    phone: '',
+                    service: '',
+                    message: '这是一个浮动聊天窗口的测试消息，请检查邮件功能是否正常工作。'
+                }
+            };
+
+            const data = testData[type];
+            document.getElementById('testType').value = type;
+            document.getElementById('name').value = data.name;
+            document.getElementById('email').value = data.email;
+            document.getElementById('company').value = data.company;
+            document.getElementById('phone').value = data.phone;
+            document.getElementById('service').value = data.service;
+            document.getElementById('message').value = data.message;
+
+            // 根据类型显示/隐藏字段
+            toggleFields(type);
+        }
+
+        // 切换字段显示
+        function toggleFields(type) {
+            const companyGroup = document.getElementById('companyGroup');
+            const phoneGroup = document.getElementById('phoneGroup');
+            const serviceGroup = document.getElementById('serviceGroup');
+
+            if (type === 'inquiry') {
+                companyGroup.style.display = 'block';
+                phoneGroup.style.display = 'block';
+                serviceGroup.style.display = 'block';
+            } else {
+                companyGroup.style.display = 'none';
+                phoneGroup.style.display = 'none';
+                serviceGroup.style.display = 'none';
+            }
+        }
+
+        // 表单提交处理
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '发送中...';
+            resultDiv.style.display = 'none';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                phone: document.getElementById('phone').value,
+                service: document.getElementById('service').value,
+                message: document.getElementById('message').value
+            };
+
+            const testType = document.getElementById('testType').value;
+            const endpoint = testType === 'inquiry' ? '/api/inquiry' : '/api/chat';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                resultDiv.style.display = 'block';
+                if (result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ 测试成功！</strong><br>
+                        ${result.message}<br>
+                        <small>请检查您的邮箱是否收到测试邮件</small>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ 测试失败</strong><br>
+                        ${result.message}
+                    `;
+                }
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <strong>❌ 网络错误</strong><br>
+                    无法连接到服务器，请检查服务器是否正在运行
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '发送测试邮件';
+            }
+        });
+
+        // 测试类型切换
+        document.getElementById('testType').addEventListener('change', function() {
+            toggleFields(this.value);
+        });
+
+        // 页面加载时检查服务器状态
+        window.addEventListener('load', function() {
+            checkServerStatus();
+            
+            // 每30秒检查一次服务器状态
+            setInterval(checkServerStatus, 30000);
+        });
+    </script>
+</body>
+</html>
