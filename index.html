@@ -17,6 +17,33 @@
             color: #333;
         }
 
+        /* 语言切换器 */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .language-switcher button {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .language-switcher button.active {
+            background: #1e3c72;
+            color: white;
+        }
+
         /* 导航栏 */
         .navbar {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -237,6 +264,113 @@
             text-align: center;
         }
 
+        /* 浮动咨询窗口 */
+        .floating-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-body {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input,
+        .chat-input textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .chat-input textarea {
+            resize: none;
+            height: 60px;
+        }
+
+        .send-btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .send-btn:hover {
+            background: #2a5298;
+        }
+
+        /* 浮动按钮 */
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
         /* 动画 */
         @keyframes fadeInUp {
             from {
@@ -266,6 +400,12 @@
             .services-grid {
                 grid-template-columns: 1fr;
             }
+
+            .floating-chat {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+            }
         }
 
         /* 成功消息样式 */
@@ -277,18 +417,61 @@
             margin-bottom: 1rem;
             display: none;
         }
+
+        /* 隐藏英文内容 */
+        .en {
+            display: none;
+        }
+
+        /* 语言切换时的显示 */
+        body[data-lang="en"] .en {
+            display: block;
+        }
+
+        body[data-lang="en"] .zh {
+            display: none;
+        }
+
+        body[data-lang="zh"] .zh {
+            display: block;
+        }
+
+        body[data-lang="zh"] .en {
+            display: none;
+        }
     </style>
 </head>
-<body>
+<body data-lang="zh">
+    <!-- 语言切换器 -->
+    <div class="language-switcher">
+        <button class="active" onclick="switchLanguage('zh')">中文</button>
+        <button onclick="switchLanguage('en')">English</button>
+    </div>
+
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">SABER专业咨询</div>
+            <div class="logo">
+                <span class="zh">SABER专业咨询</span>
+                <span class="en">SABER Professional Consulting</span>
+            </div>
             <ul class="nav-menu">
-                <li><a href="#home">首页</a></li>
-                <li><a href="#services">服务</a></li>
-                <li><a href="#about">关于我们</a></li>
-                <li><a href="#contact">联系我们</a></li>
+                <li><a href="#home">
+                    <span class="zh">首页</span>
+                    <span class="en">Home</span>
+                </a></li>
+                <li><a href="#services">
+                    <span class="zh">服务</span>
+                    <span class="en">Services</span>
+                </a></li>
+                <li><a href="#about">
+                    <span class="zh">关于我们</span>
+                    <span class="en">About Us</span>
+                </a></li>
+                <li><a href="#contact">
+                    <span class="zh">联系我们</span>
+                    <span class="en">Contact</span>
+                </a></li>
             </ul>
         </div>
     </nav>
@@ -297,9 +480,18 @@
         <!-- 英雄区域 -->
         <section id="home" class="hero">
             <div class="container">
-                <h1>沙特SABER认证专业咨询</h1>
-                <p>专业帮助沙特进口商和出口商完成市场准入，快速获得SABER认证</p>
-                <a href="#contact" class="cta-button">立即咨询</a>
+                <h1>
+                    <span class="zh">沙特SABER认证专业咨询</span>
+                    <span class="en">Saudi SABER Certification Professional Consulting</span>
+                </h1>
+                <p>
+                    <span class="zh">专业帮助沙特进口商和出口商完成市场准入，快速获得SABER认证</span>
+                    <span class="en">Professional assistance for Saudi importers and exporters to complete market access and quickly obtain SABER certification</span>
+                </p>
+                <a href="#contact" class="cta-button">
+                    <span class="zh">立即咨询</span>
+                    <span class="en">Consult Now</span>
+                </a>
             </div>
         </section>
 
@@ -307,39 +499,81 @@
         <section id="services" class="services">
             <div class="container">
                 <div class="section-title">
-                    <h2>我们的专业服务</h2>
-                    <p>为您提供全方位的SABER认证解决方案</p>
+                    <h2>
+                        <span class="zh">我们的专业服务</span>
+                        <span class="en">Our Professional Services</span>
+                    </h2>
+                    <p>
+                        <span class="zh">为您提供全方位的SABER认证解决方案</span>
+                        <span class="en">Providing comprehensive SABER certification solutions for you</span>
+                    </p>
                 </div>
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">📋</div>
-                        <h3>SABER PCOC认证</h3>
-                        <p>产品符合性证书，确保您的产品符合沙特标准要求，快速获得市场准入资格。</p>
+                        <h3>
+                            <span class="zh">SABER PCOC认证</span>
+                            <span class="en">SABER PCOC Certification</span>
+                        </h3>
+                        <p>
+                            <span class="zh">产品符合性证书，确保您的产品符合沙特标准要求，快速获得市场准入资格。</span>
+                            <span class="en">Product Conformity Certificate ensures your products meet Saudi standards and quickly obtain market access qualification.</span>
+                        </p>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">🚢</div>
-                        <h3>SABER SCOC认证</h3>
-                        <p>装运符合性证书，为您的货物提供清关保障，确保顺利进入沙特市场。</p>
+                        <h3>
+                            <span class="zh">SABER SCOC认证</span>
+                            <span class="en">SABER SCOC Certification</span>
+                        </h3>
+                        <p>
+                            <span class="zh">装运符合性证书，为您的货物提供清关保障，确保顺利进入沙特市场。</span>
+                            <span class="en">Shipment Conformity Certificate provides customs clearance guarantee for your goods and ensures smooth entry into the Saudi market.</span>
+                        </p>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">⚡</div>
-                        <h3>SASO IECEE认证</h3>
-                        <p>电气产品安全认证，满足沙特电气设备安全标准，获得市场认可。</p>
+                        <h3>
+                            <span class="zh">SASO IECEE认证</span>
+                            <span class="en">SASO IECEE Certification</span>
+                        </h3>
+                        <p>
+                            <span class="zh">电气产品安全认证，满足沙特电气设备安全标准，获得市场认可。</span>
+                            <span class="en">Electrical product safety certification meets Saudi electrical equipment safety standards and gains market recognition.</span>
+                        </p>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">🏷️</div>
-                        <h3>GCC认证</h3>
-                        <p>海湾合作委员会认证，覆盖多个海湾国家市场，扩大您的业务范围。</p>
+                        <h3>
+                            <span class="zh">GCC认证</span>
+                            <span class="en">GCC Certification</span>
+                        </h3>
+                        <p>
+                            <span class="zh">海湾合作委员会认证，覆盖多个海湾国家市场，扩大您的业务范围。</span>
+                            <span class="en">Gulf Cooperation Council certification covers multiple Gulf country markets and expands your business scope.</span>
+                        </p>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">💧</div>
-                        <h3>水效标签认证</h3>
-                        <p>沙特水效标签认证，满足环保要求，提升产品竞争力。</p>
+                        <h3>
+                            <span class="zh">水效标签认证</span>
+                            <span class="en">Water Efficiency Label Certification</span>
+                        </h3>
+                        <p>
+                            <span class="zh">沙特水效标签认证，满足环保要求，提升产品竞争力。</span>
+                            <span class="en">Saudi water efficiency label certification meets environmental requirements and enhances product competitiveness.</span>
+                        </p>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">🎯</div>
-                        <h3>全程咨询服务</h3>
-                        <p>从申请到获得证书的全程专业指导，确保认证过程顺利高效。</p>
+                        <h3>
+                            <span class="zh">全程咨询服务</span>
+                            <span class="en">Full Process Consulting</span>
+                        </h3>
+                        <p>
+                            <span class="zh">从申请到获得证书的全程专业指导，确保认证过程顺利高效。</span>
+                            <span class="en">Professional guidance throughout the process from application to certificate acquisition ensures smooth and efficient certification.</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -350,20 +584,32 @@
             <div class="container">
                 <div class="about-content">
                     <div class="about-text">
-                        <h2>为什么选择我们？</h2>
-                        <p>我们拥有丰富的SABER认证经验，专业团队熟悉沙特市场准入要求，能够为您提供最优质的服务。</p>
-                        <p>✅ 专业认证团队，经验丰富</p>
-                        <p>✅ 快速响应，高效办理</p>
-                        <p>✅ 全程跟踪，透明服务</p>
-                        <p>✅ 成功案例众多，值得信赖</p>
+                        <h2>
+                            <span class="zh">为什么选择我们？</span>
+                            <span class="en">Why Choose Us?</span>
+                        </h2>
+                        <p>
+                            <span class="zh">我们拥有丰富的SABER认证经验，专业团队熟悉沙特市场准入要求，能够为您提供最优质的服务。</span>
+                            <span class="en">We have rich SABER certification experience, and our professional team is familiar with Saudi market access requirements and can provide you with the highest quality service.</span>
+                        </p>
+                        <p>✅ <span class="zh">专业认证团队，经验丰富</span><span class="en">Professional certification team with rich experience</span></p>
+                        <p>✅ <span class="zh">快速响应，高效办理</span><span class="en">Quick response and efficient processing</span></p>
+                        <p>✅ <span class="zh">全程跟踪，透明服务</span><span class="en">Full process tracking and transparent service</span></p>
+                        <p>✅ <span class="zh">成功案例众多，值得信赖</span><span class="en">Numerous successful cases, trustworthy</span></p>
                     </div>
                     <div class="about-text">
-                        <h2>我们的优势</h2>
-                        <p>作为专业的SABER咨询服务机构，我们致力于帮助客户快速、顺利地完成沙特市场准入。</p>
-                        <p>🔹 深入了解沙特法规要求</p>
-                        <p>🔹 提供个性化解决方案</p>
-                        <p>🔹 确保认证成功率</p>
-                        <p>🔹 持续的技术支持服务</p>
+                        <h2>
+                            <span class="zh">我们的优势</span>
+                            <span class="en">Our Advantages</span>
+                        </h2>
+                        <p>
+                            <span class="zh">作为专业的SABER咨询服务机构，我们致力于帮助客户快速、顺利地完成沙特市场准入。</span>
+                            <span class="en">As a professional SABER consulting service provider, we are committed to helping clients quickly and smoothly complete Saudi market access.</span>
+                        </p>
+                        <p>🔹 <span class="zh">深入了解沙特法规要求</span><span class="en">In-depth understanding of Saudi regulatory requirements</span></p>
+                        <p>🔹 <span class="zh">提供个性化解决方案</span><span class="en">Provide personalized solutions</span></p>
+                        <p>🔹 <span class="zh">确保认证成功率</span><span class="en">Ensure certification success rate</span></p>
+                        <p>🔹 <span class="zh">持续的技术支持服务</span><span class="en">Continuous technical support service</span></p>
                     </div>
                 </div>
             </div>
@@ -373,46 +619,96 @@
         <section id="contact" class="contact">
             <div class="container">
                 <div class="section-title">
-                    <h2>联系我们</h2>
-                    <p>填写以下表单，我们将尽快与您联系</p>
+                    <h2>
+                        <span class="zh">联系我们</span>
+                        <span class="en">Contact Us</span>
+                    </h2>
+                    <p>
+                        <span class="zh">填写以下表单，我们将尽快与您联系</span>
+                        <span class="en">Fill out the form below and we will contact you as soon as possible</span>
+                    </p>
                 </div>
                 <form class="contact-form" id="contactForm">
                     <div class="success-message" id="successMessage">
-                        感谢您的咨询！我们将尽快与您联系。
+                        <span class="zh">感谢您的咨询！我们将尽快与您联系。</span>
+                        <span class="en">Thank you for your inquiry! We will contact you as soon as possible.</span>
                     </div>
                     <div class="form-group">
-                        <label for="name">姓名 *</label>
+                        <label for="name">
+                            <span class="zh">姓名 *</span>
+                            <span class="en">Name *</span>
+                        </label>
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="company">公司名称</label>
+                        <label for="company">
+                            <span class="zh">公司名称</span>
+                            <span class="en">Company Name</span>
+                        </label>
                         <input type="text" id="company" name="company">
                     </div>
                     <div class="form-group">
-                        <label for="email">邮箱 *</label>
+                        <label for="email">
+                            <span class="zh">邮箱 *</span>
+                            <span class="en">Email *</span>
+                        </label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">电话</label>
+                        <label for="phone">
+                            <span class="zh">电话</span>
+                            <span class="en">Phone</span>
+                        </label>
                         <input type="tel" id="phone" name="phone">
                     </div>
                     <div class="form-group">
-                        <label for="service">咨询服务</label>
+                        <label for="service">
+                            <span class="zh">咨询服务</span>
+                            <span class="en">Consulting Service</span>
+                        </label>
                         <select id="service" name="service">
-                            <option value="">请选择服务类型</option>
-                            <option value="saber-pcoc">SABER PCOC认证</option>
-                            <option value="saber-scoc">SABER SCOC认证</option>
-                            <option value="saso-iecee">SASO IECEE认证</option>
-                            <option value="gcc">GCC认证</option>
-                            <option value="water-efficiency">水效标签认证</option>
-                            <option value="consultation">其他咨询服务</option>
+                            <option value="">
+                                <span class="zh">请选择服务类型</span>
+                                <span class="en">Please select service type</span>
+                            </option>
+                            <option value="saber-pcoc">
+                                <span class="zh">SABER PCOC认证</span>
+                                <span class="en">SABER PCOC Certification</span>
+                            </option>
+                            <option value="saber-scoc">
+                                <span class="zh">SABER SCOC认证</span>
+                                <span class="en">SABER SCOC Certification</span>
+                            </option>
+                            <option value="saso-iecee">
+                                <span class="zh">SASO IECEE认证</span>
+                                <span class="en">SASO IECEE Certification</span>
+                            </option>
+                            <option value="gcc">
+                                <span class="zh">GCC认证</span>
+                                <span class="en">GCC Certification</span>
+                            </option>
+                            <option value="water-efficiency">
+                                <span class="zh">水效标签认证</span>
+                                <span class="en">Water Efficiency Label Certification</span>
+                            </option>
+                            <option value="consultation">
+                                <span class="zh">其他咨询服务</span>
+                                <span class="en">Other Consulting Services</span>
+                            </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="message">详细需求</label>
-                        <textarea id="message" name="message" rows="4" placeholder="请详细描述您的产品类型、认证需求等信息"></textarea>
+                        <label for="message">
+                            <span class="zh">详细需求</span>
+                            <span class="en">Detailed Requirements</span>
+                        </label>
+                        <textarea id="message" name="message" rows="4" 
+                            placeholder="请详细描述您的产品类型、认证需求等信息"></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">提交咨询</button>
+                    <button type="submit" class="submit-btn">
+                        <span class="zh">提交咨询</span>
+                        <span class="en">Submit Inquiry</span>
+                    </button>
                 </form>
             </div>
         </section>
@@ -421,11 +717,168 @@
     <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 SABER专业咨询. 保留所有权利.</p>
+            <p>
+                <span class="zh">&copy; 2024 SABER专业咨询. 保留所有权利.</span>
+                <span class="en">&copy; 2024 SABER Professional Consulting. All rights reserved.</span>
+            </p>
         </div>
     </footer>
 
+    <!-- 浮动咨询按钮 -->
+    <div class="floating-btn" onclick="toggleChat()">
+        💬
+    </div>
+
+    <!-- 浮动咨询窗口 -->
+    <div class="floating-chat" id="floatingChat">
+        <div class="chat-header">
+            <h3>
+                <span class="zh">在线咨询</span>
+                <span class="en">Online Consultation</span>
+            </h3>
+            <button class="close-chat" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div style="text-align: center; color: #666; margin-bottom: 20px;">
+                <span class="zh">您好！我是SABER认证专家，有什么可以帮助您的吗？</span>
+                <span class="en">Hello! I'm a SABER certification expert. How can I help you?</span>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatName" 
+                placeholder="您的姓名 (Your Name)" 
+                style="margin-bottom: 10px;">
+            <input type="email" id="chatEmail" 
+                placeholder="您的邮箱 (Your Email)" 
+                style="margin-bottom: 10px;">
+            <textarea id="chatMessage" 
+                placeholder="请描述您的认证需求 (Please describe your certification needs)"></textarea>
+            <button class="send-btn" onclick="sendChatMessage()">
+                <span class="zh">发送消息</span>
+                <span class="en">Send Message</span>
+            </button>
+        </div>
+    </div>
+
     <script>
+        // 语言切换功能
+        function switchLanguage(lang) {
+            document.body.setAttribute('data-lang', lang);
+            
+            // 更新语言切换器按钮状态
+            document.querySelectorAll('.language-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新页面标题
+            if (lang === 'zh') {
+                document.title = 'SABER专业咨询 - 沙特市场准入专家';
+            } else {
+                document.title = 'SABER Professional Consulting - Saudi Market Access Expert';
+            }
+        }
+
+        // 浮动聊天窗口切换
+        function toggleChat() {
+            const chat = document.getElementById('floatingChat');
+            const btn = document.querySelector('.floating-btn');
+            
+            if (chat.style.display === 'block') {
+                chat.style.display = 'none';
+                btn.style.display = 'flex';
+            } else {
+                chat.style.display = 'block';
+                btn.style.display = 'none';
+            }
+        }
+
+        // 发送聊天消息
+        function sendChatMessage() {
+            const name = document.getElementById('chatName').value;
+            const email = document.getElementById('chatEmail').value;
+            const message = document.getElementById('chatMessage').value;
+            
+            if (!name || !email || !message) {
+                alert(document.body.getAttribute('data-lang') === 'zh' ? 
+                    '请填写所有必填字段' : 'Please fill in all required fields');
+                return;
+            }
+            
+            // 发送到服务器
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 显示发送成功消息
+                    const chatBody = document.getElementById('chatBody');
+                    const successMsg = document.createElement('div');
+                    successMsg.style.cssText = 'background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin: 10px 0;';
+                    successMsg.innerHTML = document.body.getAttribute('data-lang') === 'zh' ? 
+                        '消息已发送！我们会尽快回复您。' : 'Message sent! We will reply to you as soon as possible.';
+                    chatBody.appendChild(successMsg);
+                    
+                    // 清空输入框
+                    document.getElementById('chatName').value = '';
+                    document.getElementById('chatEmail').value = '';
+                    document.getElementById('chatMessage').value = '';
+                    
+                    // 滚动到底部
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } else {
+                    alert(document.body.getAttribute('data-lang') === 'zh' ? 
+                        '发送失败，请稍后重试' : 'Send failed, please try again later');
+                }
+            })
+            .catch(error => {
+                console.error('发送请求失败:', error);
+                alert(document.body.getAttribute('data-lang') === 'zh' ? 
+                    '发送失败，请稍后重试' : 'Send failed, please try again later');
+            });
+        }
+
+        // 发送邮件功能
+        function sendEmail(name, email, message, subject) {
+            // 将信息存储到 localStorage 并显示在控制台
+            const inquiry = {
+                timestamp: new Date().toISOString(),
+                name: name,
+                email: email,
+                message: message,
+                subject: subject
+            };
+            
+            // 存储到 localStorage
+            let inquiries = JSON.parse(localStorage.getItem('saber_inquiries') || '[]');
+            inquiries.push(inquiry);
+            localStorage.setItem('saber_inquiries', JSON.stringify(inquiries));
+            
+            // 显示在控制台
+            console.log('New inquiry received:', inquiry);
+            
+            // 发送到服务器
+            fetch('/api/inquiry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(inquiry)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('邮件发送成功');
+                } else {
+                    console.error('邮件发送失败:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('发送请求失败:', error);
+            });
+        }
+
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -448,8 +901,8 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
-            // 这里可以添加实际的表单提交逻辑
-            console.log('表单数据:', data);
+            // 发送邮件
+            sendEmail(data.name, data.email, data.message, `Form Inquiry - ${data.service}`);
             
             // 显示成功消息
             document.getElementById('successMessage').style.display = 'block';
@@ -470,6 +923,15 @@
                 navbar.style.background = 'rgba(30, 60, 114, 0.95)';
             } else {
                 navbar.style.background = 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
+            }
+        });
+
+        // 页面加载时检查是否有未读消息
+        window.addEventListener('load', function() {
+            const inquiries = JSON.parse(localStorage.getItem('saber_inquiries') || '[]');
+            if (inquiries.length > 0) {
+                console.log('You have', inquiries.length, 'inquiries to review');
+                console.log('Latest inquiries:', inquiries.slice(-5));
             }
         });
     </script>
