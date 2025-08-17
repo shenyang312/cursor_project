@@ -4,10 +4,10 @@
   "description": "SABER专业咨询网站 - 沙特市场准入专家",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "setup": "node scripts/setup.js",
-    "db:init": "mysql -u root -p < deploy/mysql-setup.sql"
+    "start": "node start.js",
+    "dev": "nodemon start.js",
+    "server": "node server.js",
+    "setup": "node scripts/setup.js"
   },
   "keywords": [
     "SABER",
