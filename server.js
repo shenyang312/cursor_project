@@ -11,6 +11,7 @@ const config = require('./config');
 const rateLimit = require('./middleware/rateLimit');
 const articleModel = require('./models/article');
 const { testConnection } = require('./models/database');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = config.server.port;
@@ -21,7 +22,8 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"], // 允许内联脚本
+            scriptSrcAttr: ["'self'", "'unsafe-inline'"], // 新增允许内联事件处理
             imgSrc: ["'self'", "data:", "https:"],
         },
     },
@@ -62,6 +64,37 @@ testConnection().then(success => {
         console.error('❌ 数据库连接失败');
     }
 });
+
+// 简易内容清洗（基础防XSS）
+function sanitizeHtmlBasic(html) {
+    if (!html || typeof html !== 'string') return html;
+    let s = html;
+    // 去除<script>标签
+    s = s.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+    // 去除事件处理程序 on*
+    s = s.replace(/\s+on[a-zA-Z]+\s*=\s*"[^"]*"/gi, '');
+    s = s.replace(/\s+on[a-zA-Z]+\s*=\s*'[^']*'/gi, '');
+    s = s.replace(/\s+on[a-zA-Z]+\s*=\s*[^\s>]+/gi, '');
+    // 过滤 javascript: 协议
+    s = s.replace(/(href|src)\s*=\s*"javascript:[^"]*"/gi, '$1="#"');
+    s = s.replace(/(href|src)\s*=\s*'javascript:[^']*'/gi, '$1="#"');
+    return s;
+}
+
+// 简易管理令牌
+let adminToken = null;
+function generateAdminToken() {
+    adminToken = crypto.randomBytes(24).toString('hex');
+    return adminToken;
+}
+
+function checkAdminAuth(req, res, next) {
+    const token = req.headers['x-admin-token'];
+    if (!token || token !== adminToken) {
+        return res.status(401).json({ success: false, message: '未授权' });
+    }
+    next();
+}
 
 // 处理咨询表单提交
 app.post('/api/inquiry', rateLimit.emailRateLimit(), async (req, res) => {
@@ -244,16 +277,22 @@ app.post('/api/admin/login', rateLimit.loginRateLimit(), (req, res) => {
     const { username, password } = req.body;
     
     if (username === config.admin.username && password === config.admin.password) {
-        res.json({ success: true, message: '登录成功' });
+        const token = generateAdminToken();
+        res.json({ success: true, message: '登录成功', token });
     } else {
         res.status(401).json({ success: false, message: '用户名或密码错误' });
     }
 });
 
 // 管理后台文章管理
-app.post('/api/admin/articles', rateLimit.apiRateLimit(), async (req, res) => {
+app.post('/api/admin/articles', checkAdminAuth, rateLimit.apiRateLimit(), async (req, res) => {
     try {
-        const article = await articleModel.createArticle(req.body);
+        const payload = { ...req.body };
+        payload.title = sanitizeHtmlBasic(payload.title);
+        payload.titleEn = sanitizeHtmlBasic(payload.titleEn);
+        payload.content = sanitizeHtmlBasic(payload.content);
+        payload.contentEn = sanitizeHtmlBasic(payload.contentEn);
+        const article = await articleModel.createArticle(payload);
         res.json({ success: true, data: article });
     } catch (error) {
         console.error('创建文章失败:', error);
@@ -261,9 +300,14 @@ app.post('/api/admin/articles', rateLimit.apiRateLimit(), async (req, res) => {
     }
 });
 
-app.put('/api/admin/articles/:id', rateLimit.apiRateLimit(), async (req, res) => {
+app.put('/api/admin/articles/:id', checkAdminAuth, rateLimit.apiRateLimit(), async (req, res) => {
     try {
-        const article = await articleModel.updateArticle(req.params.id, req.body);
+        const payload = { ...req.body };
+        payload.title = sanitizeHtmlBasic(payload.title);
+        payload.titleEn = sanitizeHtmlBasic(payload.titleEn);
+        payload.content = sanitizeHtmlBasic(payload.content);
+        payload.contentEn = sanitizeHtmlBasic(payload.contentEn);
+        const article = await articleModel.updateArticle(req.params.id, payload);
         if (article) {
             res.json({ success: true, data: article });
         } else {
@@ -275,7 +319,7 @@ app.put('/api/admin/articles/:id', rateLimit.apiRateLimit(), async (req, res) =>
     }
 });
 
-app.delete('/api/admin/articles/:id', rateLimit.apiRateLimit(), async (req, res) => {
+app.delete('/api/admin/articles/:id', checkAdminAuth, rateLimit.apiRateLimit(), async (req, res) => {
     try {
         const article = await articleModel.deleteArticle(req.params.id);
         if (article) {

@@ -1243,53 +1243,45 @@
                     const title = currentLang === 'zh' ? article.title : article.titleEn;
                     const content = currentLang === 'zh' ? article.content : article.contentEn;
                     
-                    // 创建模态框显示文章详情
-                    const modal = document.createElement('div');
-                    modal.style.cssText = `
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0,0,0,0.8);
-                        z-index: 2000;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 20px;
-                    `;
-                    
-                    modal.innerHTML = `
-                        <div style="
-                            background: white;
-                            max-width: 800px;
-                            max-height: 80vh;
-                            overflow-y: auto;
-                            border-radius: 10px;
-                            padding: 2rem;
-                            position: relative;
-                        ">
-                            <button onclick="this.parentElement.parentElement.remove()" style="
-                                position: absolute;
-                                top: 10px;
-                                right: 15px;
-                                background: none;
-                                border: none;
-                                font-size: 24px;
-                                cursor: pointer;
-                                color: #666;
-                            ">×</button>
-                            <h2 style="color: #1e3c72; margin-bottom: 1rem;">${title}</h2>
-                            <div style="color: #666; margin-bottom: 1rem;">
-                                <span class="zh">分类: ${getCategoryName(article.category)}</span>
-                                <span class="en">Category: ${getCategoryNameEn(article.category)}</span>
-                                <span> | ${new Date(article.createdAt).toLocaleDateString()}</span>
-                            </div>
-                            <div style="line-height: 1.8; color: #333;">${content}</div>
-                        </div>
-                    `;
-                    
-                    document.body.appendChild(modal);
+                    // 创建模态框显示文章详情（加强图片自适应、支持点击遮罩关闭）
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = `
+                        position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+                        z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;`;
+
+                    const panel = document.createElement('div');
+                    panel.style.cssText = `background:#fff; max-width: 900px; width:100%; max-height:85vh; overflow:auto; border-radius:10px; position:relative; padding:24px;`;
+
+                    const closeBtn = document.createElement('button');
+                    closeBtn.textContent = '×';
+                    closeBtn.style.cssText = `position:absolute; top:12px; right:16px; background:none; border:none; font-size:24px; cursor:pointer; color:#666;`;
+                    closeBtn.onclick = () => overlay.remove();
+
+                    const header = document.createElement('div');
+                    header.innerHTML = `
+                        <h2 style="color:#1e3c72; margin:0 0 8px 0;">${title}</h2>
+                        <div style="color:#666; font-size:14px; margin-bottom:16px;">
+                          <span class="zh">分类: ${getCategoryName(article.category)}</span>
+                          <span class="en">Category: ${getCategoryNameEn(article.category)}</span>
+                          <span> | ${new Date(article.createdAt).toLocaleDateString()}</span>
+                        </div>`;
+
+                    const body = document.createElement('div');
+                    body.className = 'article-detail-content';
+                    body.style.cssText = 'line-height:1.8; color:#333;';
+                    body.innerHTML = content;
+
+                    // 图片自适应
+                    const style = document.createElement('style');
+                    style.textContent = `.article-detail-content img{max-width:100%;height:auto;border-radius:6px}`;
+
+                    panel.appendChild(closeBtn);
+                    panel.appendChild(header);
+                    panel.appendChild(body);
+                    overlay.appendChild(panel);
+                    document.head.appendChild(style);
+                    overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.remove(); });
+                    document.body.appendChild(overlay);
                 }
             })
             .catch(error => {
@@ -1319,6 +1311,16 @@
             };
             return categories[category] || category;
         }
+    </script>
+    <script type="module">
+      import { createArticleModal, addModalStyles, setupModalEvents } from './modal-component.js';
+      import { addNavStyles } from './nav-styles.js';
+      
+      // 初始化组件
+      addModalStyles();
+      addNavStyles();
+      createArticleModal();
+      setupModalEvents();
     </script>
 </body>
 </html>

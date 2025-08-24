@@ -127,9 +127,9 @@ class ArticleModel {
             SELECT * FROM articles 
             WHERE status = 'published' 
             ORDER BY views DESC 
-            LIMIT ?
+            LIMIT ${parseInt(limit)}
         `;
-        const articles = await query(sql, [limit]);
+        const articles = await query(sql);
         return articles.map(this.formatArticle);
     }
 
@@ -139,9 +139,9 @@ class ArticleModel {
             SELECT * FROM articles 
             WHERE status = 'published' 
             ORDER BY created_at DESC 
-            LIMIT ?
+            LIMIT ${parseInt(limit)}
         `;
-        const articles = await query(sql, [limit]);
+        const articles = await query(sql);
         return articles.map(this.formatArticle);
     }
 
@@ -194,9 +194,9 @@ class ArticleModel {
             FROM articles 
             WHERE status = 'published' 
             ORDER BY created_at DESC 
-            LIMIT ? OFFSET ?
+            LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}
         `;
-        const articles = await query(sql, [limit, offset]);
+        const articles = await query(sql);
         return articles.map(article => ({
             id: article.id,
             title: article.title,

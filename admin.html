@@ -42,7 +42,15 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
         }
 
         .form-group label {
@@ -113,12 +121,52 @@
 
         .article-form textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
             font-size: 16px;
             resize: vertical;
-            min-height: 200px;
+            min-height: 500px;
+            line-height: 1.8;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #fafbfc;
+            transition: all 0.3s ease;
+        }
+
+        .article-form textarea:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+            background: #fff;
+        }
+
+        /* 编辑区域容器样式 */
+        .editor-container {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .editor-header {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .editor-title {
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 16px;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 8px;
         }
 
         .article-list {
@@ -155,6 +203,323 @@
             border: none;
             border-radius: 3px;
             cursor: pointer;
+        }
+
+        /* 弹窗（查看/编辑） */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal {
+            background: #fff;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .toolbar {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding-right: 12px;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+        }
+
+        .toolbar button {
+            background: #fff;
+            border: 1px solid #ced4da;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .toolbar button:hover {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(30, 60, 114, 0.2);
+        }
+
+        .toolbar button:active {
+            transform: translateY(0);
+        }
+
+        .toolbar button.primary {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+
+        .toolbar button.primary:hover {
+            background: #2a5298;
+            border-color: #2a5298;
+        }
+
+        .toolbar button.secondary {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+
+        .toolbar button.secondary:hover {
+            background: #5a6268;
+            border-color: #5a6268;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .modal {
+                max-width: 95vw;
+                max-height: 95vh;
+            }
+            
+            .article-form textarea {
+                min-height: 300px;
+                font-size: 14px;
+            }
+            
+            .toolbar button {
+                padding: 4px 8px;
+                font-size: 12px;
+                margin-right: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-form textarea {
+                min-height: 250px;
+            }
+            
+            .toolbar {
+                padding: 8px;
+            }
+            
+            .toolbar button {
+                padding: 3px 6px;
+                font-size: 11px;
+                margin-right: 3px;
+            }
+        }
+
+        /* 文章详情查看样式 */
+        .article-detail-content {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .article-detail-content h1,
+        .article-detail-content h2,
+        .article-detail-content h3,
+        .article-detail-content h4,
+        .article-detail-content h5,
+        .article-detail-content h6 {
+            color: #1e3c72;
+            margin: 24px 0 16px 0;
+            font-weight: 600;
+        }
+
+        .article-detail-content h1 {
+            font-size: 28px;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 8px;
+        }
+
+        .article-detail-content h2 {
+            font-size: 24px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 6px;
+        }
+
+        .article-detail-content h3 {
+            font-size: 20px;
+        }
+
+        .article-detail-content p {
+            margin: 16px 0;
+            text-align: justify;
+        }
+
+        .article-detail-content ul,
+        .article-detail-content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .article-detail-content li {
+            margin: 8px 0;
+        }
+
+        .article-detail-content blockquote {
+            background: #f8f9fa;
+            border-left: 4px solid #1e3c72;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .article-detail-content code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .article-detail-content pre {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid #e9ecef;
+        }
+
+        .article-detail-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .article-detail-content th,
+        .article-detail-content td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .article-detail-content th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .article-detail-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 16px 0;
+        }
+
+        .article-detail-content a {
+            color: #1e3c72;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom-color 0.2s;
+        }
+
+        .article-detail-content a:hover {
+            border-bottom-color: #1e3c72;
+        }
+
+        /* 文章元信息样式 */
+        .article-meta-info {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            border-left: 4px solid #1e3c72;
+        }
+
+        .article-meta-info .meta-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .article-meta-info .meta-label {
+            font-weight: 600;
+            min-width: 80px;
+            color: #1e3c72;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin: 8px 0 12px 0;
+        }
+
+        .toolbar button {
+            background: #f1f3f5;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 13px;
         }
 
         .btn-edit {
@@ -255,14 +620,76 @@
                             <option value="news">新闻资讯</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="content">文章内容 (中文)</label>
-                        <textarea id="content" name="content" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contentEn">文章内容 (英文)</label>
-                        <textarea id="contentEn" name="contentEn" required></textarea>
-                    </div>
+                                         <div class="form-group">
+                         <label for="content">文章内容 (中文)</label>
+                         <div class="editor-container">
+                             <div class="editor-header">
+                                 <div class="editor-title">中文内容编辑器</div>
+                                 <div class="editor-actions">
+                                     <button type="button" onclick="clearContent('content')" class="btn-small secondary">清空</button>
+                                     <button type="button" onclick="previewContent('content')" class="btn-small primary">预览</button>
+                                 </div>
+                             </div>
+                             <div class="toolbar">
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('content','<h2>','</h2>')" class="primary">大标题</button>
+                                     <button type="button" onclick="wrapSelection('content','<h3>','</h3>')" class="primary">小标题</button>
+                                     <button type="button" onclick="wrapSelection('content','<h4>','</h4>')" class="primary">子标题</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('content','<p>','</p>')">段落</button>
+                                     <button type="button" onclick="wrapSelection('content','<strong>','</strong>')">加粗</button>
+                                     <button type="button" onclick="wrapSelection('content','<em>','</em>')">斜体</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('content','<ul><li>','</li></ul>')">列表</button>
+                                     <button type="button" onclick="wrapSelection('content','<ol><li>','</li></ol>')">有序列表</button>
+                                     <button type="button" onclick="wrapSelection('content','<blockquote>','</blockquote>')">引用</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="insertImage('content')" class="secondary">插入图片</button>
+                                     <button type="button" onclick="insertLink('content')" class="secondary">插入链接</button>
+                                     <button type="button" onclick="insertTable('content')" class="secondary">插入表格</button>
+                                 </div>
+                             </div>
+                             <textarea id="content" name="content" rows="25" required></textarea>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label for="contentEn">文章内容 (英文)</label>
+                         <div class="editor-container">
+                             <div class="editor-header">
+                                 <div class="editor-title">English Content Editor</div>
+                                 <div class="editor-actions">
+                                     <button type="button" onclick="clearContent('contentEn')" class="btn-small secondary">Clear</button>
+                                     <button type="button" onclick="previewContent('contentEn')" class="btn-small primary">Preview</button>
+                                 </div>
+                             </div>
+                             <div class="toolbar">
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('contentEn','<h2>','</h2>')" class="primary">Heading</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<h3>','</h3>')" class="primary">Subtitle</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<h4>','</h4>')" class="primary">Subheading</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('contentEn','<p>','</p>')">Paragraph</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<strong>','</strong>')">Bold</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<em>','</em>')">Italic</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="wrapSelection('contentEn','<ul><li>','</li></ul>')">List</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<ol><li>','</li></ol>')">Ordered List</button>
+                                     <button type="button" onclick="wrapSelection('contentEn','<blockquote>','</blockquote>')">Quote</button>
+                                 </div>
+                                 <div class="toolbar-group">
+                                     <button type="button" onclick="insertImage('contentEn')" class="secondary">Insert Image</button>
+                                     <button type="button" onclick="insertLink('contentEn')" class="secondary">Insert Link</button>
+                                     <button type="button" onclick="insertTable('contentEn')" class="secondary">Insert Table</button>
+                                 </div>
+                             </div>
+                             <textarea id="contentEn" name="contentEn" rows="25" required></textarea>
+                         </div>
+                     </div>
                     <button type="submit" class="btn">创建文章</button>
                 </form>
             </div>
@@ -271,6 +698,129 @@
             <div id="settings" class="tab-content" style="display: none;">
                 <h2>系统设置</h2>
                 <p>系统配置功能开发中...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文章查看/编辑弹窗 -->
+    <div id="articleModal" class="modal-overlay" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="articleModalTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="articleModalTitle">文章详情</div>
+                <div>
+                    <button id="toggleEditBtn" class="btn-small" style="background:#1e3c72;color:#fff;">切换编辑</button>
+                    <button class="modal-close" onclick="closeArticleModal()">×</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="articleView" class="article-detail-content" style="display:none;"></div>
+
+                <form id="editArticleForm" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>标题(中文)</label>
+                            <input id="editTitle" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>标题(英文)</label>
+                            <input id="editTitleEn" type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>分类</label>
+                            <select id="editCategory" required>
+                                <option value="certification">认证流程</option>
+                                <option value="pcoc">PCOC认证</option>
+                                <option value="scoc">SCOC认证</option>
+                                <option value="gcc">GCC认证</option>
+                                <option value="news">新闻资讯</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>作者</label>
+                            <input id="editAuthor" type="text" placeholder="默认：SABER专家">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>内容(中文)</label>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <div class="editor-title">中文内容编辑器</div>
+                                <div class="editor-actions">
+                                    <button type="button" onclick="clearContent('editContent')" class="btn-small secondary">清空</button>
+                                    <button type="button" onclick="previewContent('editContent')" class="btn-small primary">预览</button>
+                                </div>
+                            </div>
+                            <div class="toolbar">
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContent','<h2>','</h2>')" class="primary">大标题</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<h3>','</h3>')" class="primary">小标题</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<h4>','</h4>')" class="primary">子标题</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContent','<p>','</p>')">段落</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<strong>','</strong>')">加粗</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<em>','</em>')">斜体</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContent','<ul><li>','</li></ul>')">列表</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<ol><li>','</li></ol>')">有序列表</button>
+                                    <button type="button" onclick="wrapSelection('editContent','<blockquote>','</blockquote>')">引用</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="insertImage('editContent')" class="secondary">插入图片</button>
+                                    <button type="button" onclick="insertLink('editContent')" class="secondary">插入链接</button>
+                                    <button type="button" onclick="insertTable('editContent')" class="secondary">插入表格</button>
+                                </div>
+                            </div>
+                            <textarea id="editContent" rows="25" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>内容(英文)</label>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <div class="editor-title">English Content Editor</div>
+                                <div class="editor-actions">
+                                    <button type="button" onclick="clearContent('editContentEn')" class="btn-small secondary">Clear</button>
+                                    <button type="button" onclick="previewContent('editContentEn')" class="btn-small primary">Preview</button>
+                                </div>
+                            </div>
+                            <div class="toolbar">
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContentEn','<h2>','</h2>')" class="primary">Heading</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<h3>','</h3>')" class="primary">Subtitle</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<h4>','</h4>')" class="primary">Subheading</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContentEn','<p>','</p>')">Paragraph</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<strong>','</strong>')">Bold</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<em>','</em>')">Italic</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="wrapSelection('editContentEn','<ul><li>','</li></ul>')">List</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<ol><li>','</li></ol>')">Ordered List</button>
+                                    <button type="button" onclick="wrapSelection('editContentEn','<blockquote>','</blockquote>')">Quote</button>
+                                </div>
+                                <div class="toolbar-group">
+                                    <button type="button" onclick="insertImage('editContentEn')" class="secondary">Insert Image</button>
+                                    <button type="button" onclick="insertLink('editContentEn')" class="secondary">Insert Link</button>
+                                    <button type="button" onclick="insertTable('editContentEn')" class="secondary">Insert Table</button>
+                                </div>
+                            </div>
+                            <textarea id="editContentEn" rows="25" required></textarea>
+                        </div>
+                    </div>
+
+                    <div style="text-align:right;display:flex;gap:10px;justify-content:flex-end;">
+                        <button type="button" class="btn-small" onclick="closeArticleModal()">取消</button>
+                        <button type="submit" class="btn-small" style="background:#28a745;color:#fff;">保存</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -294,6 +844,8 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
+                    // 保存令牌
+                    window.sessionStorage.setItem('ADMIN_TOKEN', result.token);
                     document.getElementById('loginForm').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     loadArticles();
@@ -357,7 +909,8 @@
                         创建时间: ${new Date(article.createdAt).toLocaleString()}
                     </div>
                     <div class="article-actions">
-                        <button class="btn-small btn-edit" onclick="editArticle(${article.id})">编辑</button>
+                        <button class="btn-small btn-edit" onclick="openArticleModal(${article.id}, false)">查看</button>
+                        <button class="btn-small btn-edit" onclick="openArticleModal(${article.id}, true)">编辑</button>
                         <button class="btn-small btn-delete" onclick="deleteArticle(${article.id})">删除</button>
                     </div>
                 `;
@@ -393,7 +946,10 @@
             
             fetch('/api/admin/articles', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Admin-Token': window.sessionStorage.getItem('ADMIN_TOKEN') || ''
+                },
                 body: JSON.stringify(data)
             })
             .then(response => response.json())
@@ -416,7 +972,10 @@
         function deleteArticle(id) {
             if (confirm('确定要删除这篇文章吗？')) {
                 fetch(`/api/admin/articles/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'X-Admin-Token': window.sessionStorage.getItem('ADMIN_TOKEN') || ''
+                    }
                 })
                 .then(response => response.json())
                 .then(result => {
@@ -433,10 +992,244 @@
             }
         }
 
-        // 编辑文章（简化版）
-        function editArticle(id) {
-            alert('编辑功能开发中...');
+        // 打开文章弹窗（view/edit）
+        let currentEditArticleId = null;
+        async function openArticleModal(id, isEdit) {
+            try {
+                const resp = await fetch(`/api/articles/${id}`);
+                const result = await resp.json();
+                if (!result.success) {
+                    alert('获取文章失败');
+                    return;
+                }
+                const article = result.data;
+                currentEditArticleId = id;
+
+                const overlay = document.getElementById('articleModal');
+                const viewEl = document.getElementById('articleView');
+                const formEl = document.getElementById('editArticleForm');
+                const toggleBtn = document.getElementById('toggleEditBtn');
+                const titleEl = document.getElementById('articleModalTitle');
+
+                // 填充查看区
+                viewEl.innerHTML = `
+                    <div class="article-meta-info">
+                        <div class="meta-item">
+                            <span class="meta-label">分类:</span>
+                            <span>${article.category}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">作者:</span>
+                            <span>${article.author || 'SABER专家'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">创建时间:</span>
+                            <span>${new Date(article.createdAt).toLocaleString()}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">浏览次数:</span>
+                            <span>${article.views || 0}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="article-detail-content">
+                        <h1>${article.title}</h1>
+                        ${article.content}
+                    </div>
+                    
+                    <hr style="margin:32px 0;border:none;border-top:2px solid #e9ecef;">
+                    
+                    <div class="article-detail-content">
+                        <h1>${article.titleEn}</h1>
+                        ${article.contentEn}
+                    </div>
+                `;
+
+                // 填充编辑表单
+                document.getElementById('editTitle').value = article.title || '';
+                document.getElementById('editTitleEn').value = article.titleEn || '';
+                document.getElementById('editCategory').value = article.category || 'news';
+                document.getElementById('editAuthor').value = article.author || '';
+                document.getElementById('editContent').value = article.content || '';
+                document.getElementById('editContentEn').value = article.contentEn || '';
+
+                // 显示模式
+                titleEl.textContent = isEdit ? '编辑文章' : '文章详情';
+                viewEl.style.display = isEdit ? 'none' : 'block';
+                formEl.style.display = isEdit ? 'block' : 'none';
+                toggleBtn.onclick = () => {
+                    const viewMode = viewEl.style.display !== 'none';
+                    viewEl.style.display = viewMode ? 'none' : 'block';
+                    formEl.style.display = viewMode ? 'block' : 'none';
+                    titleEl.textContent = viewMode ? '编辑文章' : '文章详情';
+                };
+
+                overlay.style.display = 'flex';
+                overlay.setAttribute('aria-hidden', 'false');
+            } catch (e) {
+                alert('打开文章失败：' + e.message);
+            }
         }
+
+        function closeArticleModal() {
+            const overlay = document.getElementById('articleModal');
+            overlay.style.display = 'none';
+            overlay.setAttribute('aria-hidden', 'true');
+            currentEditArticleId = null;
+        }
+
+        // 编辑表单提交
+        document.addEventListener('DOMContentLoaded', () => {
+            const formEl = document.getElementById('editArticleForm');
+            formEl.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentEditArticleId) return;
+                const payload = {
+                    title: document.getElementById('editTitle').value.trim(),
+                    titleEn: document.getElementById('editTitleEn').value.trim(),
+                    category: document.getElementById('editCategory').value,
+                    author: document.getElementById('editAuthor').value.trim(),
+                    content: document.getElementById('editContent').value,
+                    contentEn: document.getElementById('editContentEn').value
+                };
+                try {
+                    const resp = await fetch(`/api/admin/articles/${currentEditArticleId}`, {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'X-Admin-Token': window.sessionStorage.getItem('ADMIN_TOKEN') || ''
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await resp.json();
+                    if (result.success) {
+                        alert('保存成功');
+                        closeArticleModal();
+                        loadArticles();
+                    } else {
+                        alert('保存失败：' + (result.message || '未知错误'));
+                    }
+                } catch (e) {
+                    alert('保存失败：' + e.message);
+                }
+            });
+        });
+
+        // 简易编辑辅助：包裹选中内容
+        function wrapSelection(textareaId, prefix, suffix) {
+            const ta = document.getElementById(textareaId);
+            const start = ta.selectionStart;
+            const end = ta.selectionEnd;
+            const before = ta.value.substring(0, start);
+            const selected = ta.value.substring(start, end);
+            const after = ta.value.substring(end);
+            ta.value = before + prefix + selected + suffix + after;
+        }
+
+        // 插入图片标签
+        function insertImage(textareaId) {
+            const url = prompt('请输入图片URL');
+            if (!url) return;
+            const ta = document.getElementById(textareaId);
+            const insert = `<img src="${url}" alt="image" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);margin:16px 0;">`;
+            const start = ta.selectionStart;
+            const before = ta.value.substring(0, start);
+            const after = ta.value.substring(start);
+            ta.value = before + insert + after;
+        }
+
+        // 插入链接
+        function insertLink(textareaId) {
+            const url = prompt('请输入链接URL');
+            const text = prompt('请输入链接文本');
+            if (!url || !text) return;
+            const ta = document.getElementById(textareaId);
+            const insert = `<a href="${url}" target="_blank">${text}</a>`;
+            const start = ta.selectionStart;
+            const before = ta.value.substring(0, start);
+            const after = ta.value.substring(start);
+            ta.value = before + insert + after;
+        }
+
+        // 插入表格
+        function insertTable(textareaId) {
+            const rows = prompt('请输入表格行数', '3');
+            const cols = prompt('请输入表格列数', '3');
+            if (!rows || !cols) return;
+            
+            let table = '<table style="width:100%;border-collapse:collapse;margin:20px 0;">\n';
+            table += '<thead>\n<tr>\n';
+            for (let i = 0; i < cols; i++) {
+                table += '<th style="border:1px solid #ddd;padding:12px;text-align:left;background:#f8f9fa;font-weight:600;">标题' + (i + 1) + '</th>\n';
+            }
+            table += '</tr>\n</thead>\n<tbody>\n';
+            
+            for (let i = 0; i < rows - 1; i++) {
+                table += '<tr>\n';
+                for (let j = 0; j < cols; j++) {
+                    table += '<td style="border:1px solid #ddd;padding:12px;">内容' + (i + 1) + '-' + (j + 1) + '</td>\n';
+                }
+                table += '</tr>\n';
+            }
+            table += '</tbody>\n</table>';
+            
+            const ta = document.getElementById(textareaId);
+            const start = ta.selectionStart;
+            const before = ta.value.substring(0, start);
+            const after = ta.value.substring(start);
+            ta.value = before + table + after;
+        }
+
+        // 清空内容
+        function clearContent(textareaId) {
+            if (confirm('确定要清空内容吗？')) {
+                document.getElementById(textareaId).value = '';
+            }
+        }
+
+        // 预览内容
+        function previewContent(textareaId) {
+            const content = document.getElementById(textareaId).value;
+            if (!content.trim()) {
+                alert('没有内容可预览');
+                return;
+            }
+            
+            const previewWindow = window.open('', '_blank', 'width=800,height=600');
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>内容预览</title>
+                    <style>
+                        body { font-family: 'Microsoft YaHei', Arial, sans-serif; line-height: 1.8; color: #333; padding: 20px; }
+                        h1, h2, h3, h4, h5, h6 { color: #1e3c72; margin: 24px 0 16px 0; font-weight: 600; }
+                        h1 { font-size: 28px; border-bottom: 2px solid #1e3c72; padding-bottom: 8px; }
+                        h2 { font-size: 24px; border-bottom: 1px solid #e9ecef; padding-bottom: 6px; }
+                        h3 { font-size: 20px; }
+                        p { margin: 16px 0; text-align: justify; }
+                        ul, ol { margin: 16px 0; padding-left: 24px; }
+                        li { margin: 8px 0; }
+                        blockquote { background: #f8f9fa; border-left: 4px solid #1e3c72; padding: 16px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+                        img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 16px 0; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background: #f8f9fa; font-weight: 600; }
+                        a { color: #1e3c72; text-decoration: none; }
+                        a:hover { text-decoration: underline; }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+                </html>
+            `);
+            previewWindow.document.close();
+        }
+    </script>
+    <script type="module">
+      import { setupAdminFeatures } from './admin-component.js';
+      setupAdminFeatures();
     </script>
 </body>
 </html>
