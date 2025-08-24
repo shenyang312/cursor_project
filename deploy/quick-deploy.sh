@@ -1,64 +1,44 @@
 #!/bin/bash
 
-echo "🚀 SABER咨询网站 - 快速部署脚本"
-echo "=================================="
+# SABER咨询网站 - 快速部署脚本
+# 使用方法: ./quick-deploy.sh
 
-# 检查Node.js
-if ! command -v node &> /dev/null; then
-    echo "❌ 请先安装Node.js"
-    exit 1
+echo "🚀 SABER咨询网站 - 快速部署"
+echo "============================"
+
+# 项目配置
+PROJECT_DIR="/opt/saber-consulting"
+GITHUB_REPO="https://github.com/shenyang312/cursor_project.git"
+
+echo "📥 克隆项目..."
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+
+if [ -d ".git" ]; then
+    echo "🔄 更新代码..."
+    git pull origin main
+else
+    echo "📥 克隆代码..."
+    git clone $GITHUB_REPO .
 fi
 
-# 检查MySQL
-if ! command -v mysql &> /dev/null; then
-    echo "❌ 请先安装MySQL"
-    exit 1
-fi
-
-# 安装依赖
-echo "📦 安装项目依赖..."
+echo "📦 安装依赖..."
 npm install --production
 
-# 创建环境变量文件
+echo "⚙️ 配置环境..."
 if [ ! -f ".env" ]; then
-    echo "📝 创建环境变量文件..."
     cp env.example .env
-    echo "⚠️  请编辑.env文件配置邮箱授权码"
+    echo "✅ 环境配置文件已创建，请编辑 $PROJECT_DIR/.env"
 fi
 
-# 检查数据库连接
-echo "🗄️ 检查数据库连接..."
-if mysql -u root -p -e "USE saber_consulting;" 2>/dev/null; then
-    echo "✅ 数据库已存在"
-else
-    echo "📊 创建数据库..."
-    mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS saber_consulting CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-    mysql -u root -p -e "CREATE USER IF NOT EXISTS 'saber_user'@'localhost' IDENTIFIED BY 'saber_password';"
-    mysql -u root -p -e "GRANT ALL PRIVILEGES ON saber_consulting.* TO 'saber_user'@'localhost';"
-    mysql -u root -p -e "FLUSH PRIVILEGES;"
-    
-    echo "🗄️ 初始化数据库..."
-    mysql -u saber_user -psaber_password saber_consulting < deploy/mysql-setup.sql
-fi
+echo "📊 初始化数据库..."
+node scripts/init-database.js
 
-# 安装PM2
-if ! command -v pm2 &> /dev/null; then
-    echo "⚡ 安装PM2..."
-    sudo npm install -g pm2
-fi
-
-# 启动服务
 echo "🚀 启动服务..."
-pm2 start server.js --name saber-consulting
-pm2 startup
+pm2 delete saber-consulting 2>/dev/null || true
+pm2 start start.js --name saber-consulting
 pm2 save
 
-echo "🎉 部署完成！"
-echo ""
-echo "📋 访问地址："
-echo "   http://localhost:3000"
-echo ""
-echo "🔧 管理命令："
-echo "   pm2 status          # 查看状态"
-echo "   pm2 logs saber-consulting  # 查看日志"
-echo "   pm2 restart saber-consulting  # 重启服务"
+echo "✅ 部署完成！"
+echo "🌐 访问地址: http://$(hostname -I | awk '{print $1}'):3000"
+echo "🔧 管理命令: pm2 status"
